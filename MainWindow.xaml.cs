@@ -20,7 +20,8 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        test();
+        // test();
+        test2();
     }
 
     
@@ -46,5 +47,42 @@ public partial class MainWindow : Window
         {
             Console.WriteLine(oeoe[i]);
         }
+    }
+
+
+    public void test2()
+    {
+        Player player = new Player();
+        Player dealer = new Player();
+        CardDeck deck = new CardDeck();
+        
+        deck.Shuffle();
+        
+        player.AddCard(deck.DrawCard());
+        player.AddCard(deck.DrawCard());
+        dealer.AddCard(deck.DrawCard());
+        dealer.AddCard(deck.DrawCard());
+        dealer.AddCard(deck.DrawCard());
+        dealer.AddCard(deck.DrawCard());
+        player.AddCard(deck.DrawCard());
+
+        Console.WriteLine(player.HandValue());
+        Console.WriteLine(dealer.DealersVisibleHandValue());
+        Console.WriteLine(dealer.HandValue());
+
+        for (int i = 0; i < player.Hand.Count; i++)
+        {
+            Console.WriteLine(player.Hand[i]);
+        }
+        
+        for (int i = 0; i < dealer.Hand.Count; i++)
+        {
+            Console.WriteLine(dealer.Hand[i]);
+        }
+        
+        
+
+
+
     }
 }
