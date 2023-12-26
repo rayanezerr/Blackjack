@@ -22,16 +22,52 @@ public class CardDeck
         }
     }
 
+    public int Length()
+    {
+        return cardsList.Count;
+    }
+
+    public Card this[int index]
+    {
+        get
+        {
+            if (index >= 0 && index < cardsList.Count)
+            {
+                return cardsList[index];
+            }
+            else
+            {
+                throw new IndexOutOfRangeException("Max 51");
+            }
+        }
+    }
 
     public void Shuffle()
     {
         Random rand = new Random();
-        for (int i = cardsList.Count; i > 1; i--)
+        for (int i = cardsList.Count-1; i > 0; i--)
         {
             int k = rand.Next(i + 1);
-            Card value = cardsList[k];
-            cardsList[k] = cardsList[i];
-            cardsList[i] = value;
+            // Card value = cardsList[k];
+            // cardsList[k] = cardsList[i];
+            // cardsList[i] = value;
+            (cardsList[k], cardsList[i]) = (cardsList[i], cardsList[k]);
         }
+    }
+
+    public Card DrawCard()
+    {
+        Card drawnCard = cardsList[0];
+        cardsList.RemoveAt(0);
+        return drawnCard;
+    }
+
+    public bool IsDeckEmpty()
+    {
+        if (cardsList.Count == 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

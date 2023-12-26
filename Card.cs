@@ -26,7 +26,7 @@ public class Card
         return 0;
     }
     
-    //Not sure if i'll use it
+    //For testing
     public override string ToString()
     {
         return $"{Rank} of {Type}";
