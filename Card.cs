@@ -23,6 +23,10 @@ public class Card
         {
             return 10;
         }
+        else if (Rank == "Ace")
+        {
+            return 1;
+        }
         return 0;
     }
     
