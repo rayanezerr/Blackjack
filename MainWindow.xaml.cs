@@ -79,10 +79,5 @@ public partial class MainWindow : Window
         {
             Console.WriteLine(dealer.Hand[i]);
         }
-        
-        
-
-
-
     }
 }
