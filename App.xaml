@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:Blackjack"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        
+        <SolidColorBrush x:Key="BackgroundColor" Color = "#115700"></SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonColor" Color = "#009c6f"></SolidColorBrush>
     </Application.Resources>
 </Application>

@@ -7,10 +7,10 @@ public class GameState
     public Player dealer;
     public Player CurrentPlayer;
     public bool GameOver { get; private set; }
+    
     public Player winner;
     public event Action PlayerTurnStarted;
     public event Action PlayerHit;
-    public event Action PlayerStand;
     public event Action PlayerTurnEnded; 
     public event Action DealerTurnStarted; 
     public event Action GameEnded; 
@@ -73,8 +73,45 @@ public class GameState
 
         return false;
     }
-    
-    
-    
-    
+
+    public void StartPlayerTurn()
+    {
+        PlayerTurnStarted?.Invoke();
+    }
+
+    public void Hit()
+    {
+        CurrentPlayer.AddCard(deck.DrawCard());
+
+        if (IsBusted(CurrentPlayer))
+        {
+            PlayerTurnEnded?.Invoke();
+        }
+
+        else
+        {
+            PlayerHit?.Invoke();
+        }
+    }
+
+    public void Stand()
+    {
+        if (CurrentPlayer == player)
+        {
+            PlayerTurnEnded?.Invoke();
+            StartDealerTurn();
+        }
+    }
+
+    public void StartDealerTurn()
+    {
+        DealerTurnStarted?.Invoke();
+
+        while (!IsDealerAbove() && !IsBusted(dealer))
+        {
+            dealer.AddCard(deck.DrawCard());
+        }
+        
+        GameEnded?.Invoke();
+    }
 }

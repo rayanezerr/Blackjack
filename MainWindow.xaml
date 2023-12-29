@@ -5,8 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blackjack"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Blackjack" Height="700" Width="800"
+        FontFamily="Segoe UI Light"
+        Background="{StaticResource BackgroundColor}">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="3" x:Name="BetPanel"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Visibility="Hidden">
+            <TextBlock FontSize="54"
+                       Text="Place your bet : "
+                       Margin="0,0,0,15">
+            </TextBlock>
+            
+            <TextBox x:Name="BetBox"
+                     Width="200"
+                     Height="54"
+                     FontSize="35"
+                     Background="#0d4001"
+                     BorderBrush="{StaticResource BackgroundColor}">
+            </TextBox>
+        </StackPanel>
+        
+        <Button Grid.Row="4" 
+                x:Name="BetButton"
+                Content="Bet"
+                Background="{StaticResource ButtonColor}"
+                FontSize="35"
+                Margin="0,20,0,0"
+                Padding="0,0,0,5"
+                BorderBrush="Black"
+                Height="50"
+                Width="100"
+                Click="Bet_Click"
+                Visibility="Hidden">
+        </Button>
+        
+        
     </Grid>
 </Window>
