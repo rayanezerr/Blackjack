@@ -83,15 +83,16 @@ public class GameState
     {
         CurrentPlayer.AddCard(deck.DrawCard());
 
-        if (IsBusted(CurrentPlayer))
-        {
-            PlayerTurnEnded?.Invoke();
-        }
-
-        else
-        {
-            PlayerHit?.Invoke();
-        }
+        // if (IsBusted(CurrentPlayer))
+        // {
+        //     PlayerTurnEnded?.Invoke();
+        //     Console.WriteLine("Busted");
+        // }
+        //
+        // else
+        // {
+        //     PlayerHit?.Invoke();
+        // }
     }
 
     public void Stand()
@@ -111,7 +112,17 @@ public class GameState
         {
             dealer.AddCard(deck.DrawCard());
         }
-        
+        Console.WriteLine(dealer.HandValue());
         GameEnded?.Invoke();
+    }
+
+    public int Gains(int bet)
+    {
+        if (winner == player)
+        {
+            return bet * 2;
+        }
+
+        return 0;
     }
 }

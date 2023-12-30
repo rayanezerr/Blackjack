@@ -18,17 +18,70 @@ namespace Blackjack;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private int z = 2;
+    private List<Image> imageList = new List<Image>();
+    
     private int betMoney;
+    private readonly GameState game = new GameState();
     public MainWindow()
     {
         InitializeComponent();
+        imageList.Add(PlayerCard1);
+        imageList.Add(PlayerCard2);
+        imageList.Add(PlayerCard3);
+        imageList.Add(PlayerCard4);
+        imageList.Add(PlayerCard5);
+    }
+
+    private string GetCardPath(Card card)
+    {
+        return $"{card.Rank.ToLower()}_of_{card.Type.ToLower()}.png";
+    }
+
+    private ImageSource UpdateImageSource(string path)
+    {
+        ImageSource source = new BitmapImage(new Uri($"pack://application:,,,/assets2/{path}"));
+        return source;
+    }
+    
+    private void UpdatePlayerHandUI()
+    {
         
-        Console.WriteLine(betMoney);
+        for (int i = 0; i < z; i++)
+        {
+            imageList[i].Source = UpdateImageSource(GetCardPath(game.player.Hand[i]));
+        }
+    }
+
+    private void UpdateDealerHandUI(bool allCards = false)
+    {
         
     }
+
+    private void UpdateBetUI()
+    {
+        
+    }
+    
     private void Bet_Click(object sender, RoutedEventArgs e)
     {
         betMoney = int.Parse(BetBox.Text);
+        UpdatePlayerHandUI();
+        BetGrid.Visibility = Visibility.Hidden;
+        GameGrid.Visibility = Visibility.Visible;
+    }
+    private void Hit_Click(object sender, RoutedEventArgs e)
+    {
+        game.Hit();
+        z += 1;
+        UpdatePlayerHandUI();
+        
+        Console.WriteLine(GetCardPath(game.player.Hand[game.player.Hand.Count-1]));   
+    }
+    
+    private void Stand_Click(object sender, RoutedEventArgs e)
+    {
+        game.Stand();
     }
     
     
@@ -42,85 +95,4 @@ public partial class MainWindow : Window
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // //Testing functions
-    // public void test()
-    // {
-    //     CardDeck oeoe = new CardDeck();
-    //     oeoe.Shuffle();
-    //     for (int i = 0; i < oeoe.Length(); i++)
-    //     {
-    //         Console.WriteLine(oeoe[i]);
-    //     }
-    //     Console.WriteLine("=====================");
-    //     Console.WriteLine(oeoe.Length());
-    //     for (int i = 0; i < 52; i++)
-    //     {
-    //         oeoe.DrawCard();
-    //     }
-    //     Console.WriteLine(oeoe.Length());
-    //     Console.WriteLine("=====================");
-    //     Console.WriteLine(oeoe.IsDeckEmpty());
-    //     for (int i = 0; i < oeoe.Length(); i++)
-    //     {
-    //         Console.WriteLine(oeoe[i]);
-    //     }
-    // }
-    //
-    //
-    // public void test2()
-    // {
-    //     Player player = new Player();
-    //     Player dealer = new Player();
-    //     CardDeck deck = new CardDeck();
-    //     
-    //     deck.Shuffle();
-    //     
-    //     player.AddCard(deck.DrawCard());
-    //     player.AddCard(deck.DrawCard());
-    //     dealer.AddCard(deck.DrawCard());
-    //     dealer.AddCard(deck.DrawCard());
-    //     dealer.AddCard(deck.DrawCard());
-    //     dealer.AddCard(deck.DrawCard());
-    //     player.AddCard(deck.DrawCard());
-    //
-    //     Console.WriteLine(player.HandValue());
-    //     Console.WriteLine(dealer.DealersVisibleHandValue());
-    //     Console.WriteLine(dealer.HandValue());
-    //
-    //     for (int i = 0; i < player.Hand.Count; i++)
-    //     {
-    //         Console.WriteLine(player.Hand[i]);
-    //     }
-    //     
-    //     for (int i = 0; i < dealer.Hand.Count; i++)
-    //     {
-    //         Console.WriteLine(dealer.Hand[i]);
-    //     }
-    // }
 }

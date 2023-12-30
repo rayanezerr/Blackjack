@@ -9,48 +9,103 @@
         FontFamily="Segoe UI Light"
         Background="{StaticResource BackgroundColor}">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="100"/>
-        </Grid.RowDefinitions>
+        <Grid x:Name="BetGrid"
+              Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="3" x:Name="BetPanel"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <TextBlock FontSize="54"
+                           Text="Place your bet : "
+                           Margin="0,0,0,15">
+                </TextBlock>
+                
+                <TextBox x:Name="BetBox"
+                         Width="200"
+                         Height="54"
+                         FontSize="35"
+                         Background="#0d4001"
+                         BorderBrush="{StaticResource BackgroundColor}">
+                </TextBox>
+            </StackPanel>
+            
+            <Button Grid.Row="4" 
+                    x:Name="BetButton"
+                    Content="Bet"
+                    Background="{StaticResource ButtonColor}"
+                    FontSize="35"
+                    Margin="0,20,0,0"
+                    Padding="0,0,0,5"
+                    BorderBrush="Black"
+                    Height="50"
+                    Width="100"
+                    Click="Bet_Click">
+            </Button>
+        </Grid>
         
-        <StackPanel Grid.Row="3" x:Name="BetPanel"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Visibility="Hidden">
-            <TextBlock FontSize="54"
-                       Text="Place your bet : "
-                       Margin="0,0,0,15">
+        <Grid x:Name="GameGrid"
+              Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="250"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="250"/>
+            </Grid.RowDefinitions>
+            
+            <Button Grid.Row="0" 
+                    x:Name="HitButton"
+                    Content="Hit"
+                    Background="{StaticResource ButtonColor}"
+                    FontSize="35"
+                    Margin="0,25,100,0"
+                    Padding="0,0,0,0"
+                    BorderBrush="Black"
+                    Height="50"
+                    Width="100"
+                    Click="Hit_Click">
+            </Button>
+            <Button Grid.Row="0" 
+                    x:Name="StandButton"
+                    Content="Stand"
+                    Background="{StaticResource ButtonColor}"
+                    FontSize="35"
+                    Margin="100,25,0,0"
+                    Padding="0,0,0,0"
+                    BorderBrush="Black"
+                    Height="50"
+                    Width="100"
+                    Click="Stand_Click">
+            </Button>
+            
+            <WrapPanel Grid.Row="1"
+                       Visibility="Visible">
+                <Image x:Name= "PlayerCard1" Width="150" Height="218" Margin="0,5" Source=""></Image>
+                <Image x:Name= "PlayerCard2" Width="150" Height="218"></Image>
+                <Image x:Name= "PlayerCard3" Width="150" Height="218"></Image>
+                <Image x:Name= "PlayerCard4" Width="150" Height="218"></Image>
+                <Image x:Name= "PlayerCard5" Width="150" Height="218"></Image>
+
+            </WrapPanel>
+            
+            <TextBlock x:Name="BustedBlock"
+                       Margin="0,300,0,0"
+                       Height="100"
+                       Text="Busted"
+                       Visibility="Hidden">
             </TextBlock>
             
-            <TextBox x:Name="BetBox"
-                     Width="200"
-                     Height="54"
-                     FontSize="35"
-                     Background="#0d4001"
-                     BorderBrush="{StaticResource BackgroundColor}">
-            </TextBox>
-        </StackPanel>
+        </Grid>
         
-        <Button Grid.Row="4" 
-                x:Name="BetButton"
-                Content="Bet"
-                Background="{StaticResource ButtonColor}"
-                FontSize="35"
-                Margin="0,20,0,0"
-                Padding="0,0,0,5"
-                BorderBrush="Black"
-                Height="50"
-                Width="100"
-                Click="Bet_Click"
-                Visibility="Hidden">
-        </Button>
         
         
     </Grid>
