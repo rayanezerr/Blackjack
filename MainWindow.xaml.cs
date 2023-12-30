@@ -40,7 +40,7 @@ public partial class MainWindow : Window
 
     private ImageSource UpdateImageSource(string path)
     {
-        ImageSource source = new BitmapImage(new Uri($"pack://application:,,,/assets2/{path}"));
+        ImageSource source = new BitmapImage(new Uri($"pack://application:,,,/assets/{path}"));
         return source;
     }
     
