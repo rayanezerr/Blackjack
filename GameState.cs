@@ -10,9 +10,9 @@ public class GameState
     
     public Player winner;
     public event Action PlayerTurnStarted;
-    public event Action PlayerHit;
-    public event Action PlayerTurnEnded; 
-    public event Action DealerTurnStarted; 
+    public event Action Tie;
+    public event Action<bool> PlayerLose; //Boolean value true if busted 
+    public event Action<bool> DealerLose; //Boolean value true if busted
     public event Action GameEnded; 
 
     public GameState()
@@ -66,63 +66,59 @@ public class GameState
     {
         if (p.HandValue() > 21)
         {
-            GameOver = true;
-            winner = SwitchPlayer();
             return true;
         }
-
         return false;
     }
 
-    public void StartPlayerTurn()
-    {
-        PlayerTurnStarted?.Invoke();
-    }
+    // public void StartPlayerTurn()
+    // {
+    //     PlayerTurnStarted?.Invoke();
+    // }
 
     public void Hit()
     {
         CurrentPlayer.AddCard(deck.DrawCard());
 
-        // if (IsBusted(CurrentPlayer))
-        // {
-        //     PlayerTurnEnded?.Invoke();
-        //     Console.WriteLine("Busted");
-        // }
-        //
-        // else
-        // {
-        //     PlayerHit?.Invoke();
-        // }
+        if (IsBusted(CurrentPlayer))
+        {
+            PlayerLose?.Invoke(true);
+            GameEnded?.Invoke();
+        }
     }
 
     public void Stand()
     {
-        if (CurrentPlayer == player)
-        {
-            PlayerTurnEnded?.Invoke();
-            StartDealerTurn();
-        }
+        StartDealerTurn();
     }
 
     public void StartDealerTurn()
     {
-        DealerTurnStarted?.Invoke();
-
         while (!IsDealerAbove() && !IsBusted(dealer))
         {
             dealer.AddCard(deck.DrawCard());
         }
         Console.WriteLine(dealer.HandValue());
-        GameEnded?.Invoke();
-    }
-
-    public int Gains(int bet)
-    {
-        if (winner == player)
+        if (IsBusted(dealer))
         {
-            return bet * 2;
+            DealerLose?.Invoke(true);
         }
-
-        return 0;
+        else
+        {
+            if (dealer.HandValue() > player.HandValue())
+            {
+                PlayerLose?.Invoke(false);
+                GameEnded?.Invoke();
+            }
+            else if (dealer.HandValue() < player.HandValue())
+            {
+                DealerLose?.Invoke(false);
+                GameEnded?.Invoke();
+            }
+            else
+            {
+                Tie?.Invoke();
+            }
+        }
     }
 }

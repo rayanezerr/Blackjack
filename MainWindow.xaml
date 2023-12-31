@@ -9,6 +9,10 @@
         FontFamily="Segoe UI Light"
         Background="{StaticResource BackgroundColor}">
     <Grid>
+        <StackPanel>
+            <TextBlock x:Name="CurrentChips"
+                       FontSize="32"></TextBlock>
+        </StackPanel>
         <Grid x:Name="BetGrid"
               Visibility="Visible">
             <Grid.RowDefinitions>
@@ -54,7 +58,7 @@
         </Grid>
         
         <Grid x:Name="GameGrid"
-              Visibility="Visible">
+              Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="250"/>
@@ -87,14 +91,27 @@
                     Click="Stand_Click">
             </Button>
             
-            <WrapPanel Grid.Row="1"
+            <WrapPanel Grid.Row="3"
                        Visibility="Visible">
-                <Image x:Name= "PlayerCard1" Width="150" Height="218" Margin="0,5" Source=""></Image>
+                <Image x:Name= "PlayerCard1" Width="150" Height="218"></Image>
                 <Image x:Name= "PlayerCard2" Width="150" Height="218"></Image>
                 <Image x:Name= "PlayerCard3" Width="150" Height="218"></Image>
                 <Image x:Name= "PlayerCard4" Width="150" Height="218"></Image>
                 <Image x:Name= "PlayerCard5" Width="150" Height="218"></Image>
+                <Image x:Name= "PlayerCard6" Width="150" Height="218"></Image>
+                <Image x:Name= "PlayerCard7" Width="150" Height="218"></Image>
+                <Image x:Name= "PlayerCard8" Width="150" Height="218"></Image>
 
+            </WrapPanel>
+            <WrapPanel Grid.Row="1"
+                       Visibility="Visible">
+                <Image x:Name= "DealerCard1" Width="150" Height="218"></Image>
+                <Image x:Name= "DealerCard2" Width="150" Height="218"></Image>
+                <Image x:Name= "DealerCard3" Width="150" Height="218"></Image>
+                <Image x:Name= "DealerCard4" Width="150" Height="218"></Image>
+                <Image x:Name= "DealerCard5" Width="150" Height="218"></Image>
+                <Image x:Name= "DealerCard6" Width="150" Height="218"></Image>
+                <Image x:Name= "DealerCard7" Width="150" Height="218"></Image>
             </WrapPanel>
             
             <TextBlock x:Name="BustedBlock"
@@ -105,6 +122,37 @@
             </TextBlock>
             
         </Grid>
+        
+        <Grid x:Name="EndGrid"
+              Visibility="Hidden"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <TextBlock x:Name="EndText"
+                       FontSize="54"
+                       Text="Busted, player lose">
+            </TextBlock>
+            
+        </Grid>
+        
+        <Grid x:Name="InfoGrid"
+              Visibility="Hidden"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <TextBlock x:Name="InfoText"
+                       FontSize="54"
+                       Text="Busted, player lose">
+            </TextBlock>
+            
+        </Grid>
+        
         
         
         
