@@ -83,7 +83,6 @@ public partial class MainWindow : Window
         if (allCards)
         {
             i = 0;
-            DealerValueText.Text = $"Dealer's hand value : {game.dealer.HandValue()}";
         }
         else
         {
@@ -106,17 +105,20 @@ public partial class MainWindow : Window
     
     private void Bet_Click(object sender, RoutedEventArgs e)
     {
-        betMoney = int.Parse(BetBox.Text);
-        UpdatePlayerHandUI();
-        UpdateDealerHandUI();
-        if (betMoney > totalChips)
+        if (BetBox.Text != "")
         {
-            betMoney = totalChips;
+            betMoney = int.Parse(BetBox.Text);
+            UpdatePlayerHandUI();
+            UpdateDealerHandUI();
+            if (betMoney > totalChips)
+            {
+                betMoney = totalChips;
+            }
+            totalChips -= betMoney;
+            UpdateBetUI();
+            BetGrid.Visibility = Visibility.Hidden;
+            GameGrid.Visibility = Visibility.Visible;
         }
-        totalChips -= betMoney;
-        UpdateBetUI();
-        BetGrid.Visibility = Visibility.Hidden;
-        GameGrid.Visibility = Visibility.Visible;
     }
     private void Hit_Click(object sender, RoutedEventArgs e)
     {
@@ -124,12 +126,14 @@ public partial class MainWindow : Window
         z += 1;
         UpdatePlayerHandUI();
     }
-    
-    private void Stand_Click(object sender, RoutedEventArgs e)
+
+    private async void Stand_Click(object sender, RoutedEventArgs e)
     {
         game.Stand();
         HitButton.Visibility = Visibility.Hidden;
         UpdateDealerHandUI(true);
+        await Task.Delay(game.dealer.Hand.Count *500);
+        DealerValueText.Text = $"Dealer's hand value : {game.dealer.HandValue()}";
     }
 
     private async void OnPlayerLose(bool busted)
@@ -138,11 +142,11 @@ public partial class MainWindow : Window
         await Task.Delay(1000 + game.dealer.Hand.Count*500);
         if (busted)
         {
-            EndText.Text = "Player busted, dealer win";
+            EndText.Text = "Player busted, dealer wins";
         }
         else
         {
-            EndText.Text = "Player lose";
+            EndText.Text = "Player loses";
         }
         EndGrid.Visibility = Visibility.Visible;
         
@@ -154,11 +158,11 @@ public partial class MainWindow : Window
         await Task.Delay(1000 + game.dealer.Hand.Count*500);
         if (busted)
         {
-            EndText.Text = "Dealer busted, player win";
+            EndText.Text = "Dealer busted, player wins";
         }
         else
         {
-            EndText.Text = "Player win";
+            EndText.Text = "Player wins";
         }
         // GameGrid.Visibility = Visibility.Hidden;
         EndGrid.Visibility = Visibility.Visible;
