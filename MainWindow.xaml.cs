@@ -20,39 +20,41 @@ public partial class MainWindow : Window
 {
     private int totalChips = 1000;
     private int z = 2;
-    private int y = 2;
     private List<Image> playerUiImage = new List<Image>();
     private List<Image> dealerUiImage = new List<Image>();
     
     private int betMoney;
-    private readonly GameState game = new GameState();
+    private GameState game;
     public MainWindow()
     {
+        game = new GameState();
         InitializeComponent();
         SetUpUI();
         UpdateBetUI();
-        game.PlayerLose += OnPlayerLose;
-        game.DealerLose += OnDealerLose;
-        game.Tie += OnTie;
+        AttachEvent();
     }
 
     private void SetUpUI()
     {
-        playerUiImage.Add(PlayerCard1);
-        playerUiImage.Add(PlayerCard2);
-        playerUiImage.Add(PlayerCard3);
-        playerUiImage.Add(PlayerCard4);
-        playerUiImage.Add(PlayerCard5);
-        playerUiImage.Add(PlayerCard6);
-        playerUiImage.Add(PlayerCard7);
-        playerUiImage.Add(PlayerCard8);
-        dealerUiImage.Add(DealerCard1);
-        dealerUiImage.Add(DealerCard2);
-        dealerUiImage.Add(DealerCard3);
-        dealerUiImage.Add(DealerCard4);
-        dealerUiImage.Add(DealerCard5);
-        dealerUiImage.Add(DealerCard6);
-        dealerUiImage.Add(DealerCard7);
+        playerUiImage.Clear();
+        dealerUiImage.Clear();
+        for (int i = 1; i <= 8; i++)
+        {
+            playerUiImage.Add((Image)FindName($"PlayerCard{i}"));
+        }
+
+        for (int i = 1; i <= 7; i++)
+        {
+            dealerUiImage.Add((Image)FindName($"DealerCard{i}"));
+        }
+    }
+
+    private void AttachEvent()
+    {
+        game.PlayerLose += OnPlayerLose;
+        game.DealerLose += OnDealerLose;
+        game.Tie += OnTie;
+        game.GameEnded += OnGameEnded;
     }
     private string GetCardPath(Card card)
     {
@@ -71,6 +73,8 @@ public partial class MainWindow : Window
         {
             playerUiImage[i].Source = UpdateImageSource(GetCardPath(game.player.Hand[i]));
         }
+
+        PlayerValueText.Text = $"Hand value : {game.player.HandValue()}";
     }
 
     private async void UpdateDealerHandUI(bool allCards = false)
@@ -79,14 +83,16 @@ public partial class MainWindow : Window
         if (allCards)
         {
             i = 0;
+            DealerValueText.Text = $"Dealer's hand value : {game.dealer.HandValue()}";
         }
         else
         {
             i = 1;
             dealerUiImage[0].Source = new BitmapImage(new Uri($"pack://application:,,,/assets/back.png"));
+            DealerValueText.Text = $"Dealer's hand value : {game.dealer.DealersVisibleHandValue()}";
         }
         while (i < game.dealer.Hand.Count)
-        {
+        { 
             await Task.Delay(500);
             dealerUiImage[i].Source = UpdateImageSource(GetCardPath(game.dealer.Hand[i]));
             i++;
@@ -117,8 +123,6 @@ public partial class MainWindow : Window
         game.Hit();
         z += 1;
         UpdatePlayerHandUI();
-        
-        Console.WriteLine(GetCardPath(game.player.Hand[game.player.Hand.Count-1]));   
     }
     
     private void Stand_Click(object sender, RoutedEventArgs e)
@@ -131,7 +135,7 @@ public partial class MainWindow : Window
     private async void OnPlayerLose(bool busted)
     {
         HideButtons();
-        await Task.Delay(1000);
+        await Task.Delay(1000 + game.dealer.Hand.Count*500);
         if (busted)
         {
             EndText.Text = "Player busted, dealer win";
@@ -140,15 +144,14 @@ public partial class MainWindow : Window
         {
             EndText.Text = "Player lose";
         }
-        // GameGrid.Visibility = Visibility.Hidden;
         EndGrid.Visibility = Visibility.Visible;
-        SummaryScreen(game.dealer);
+        
     }
 
     private async void OnDealerLose(bool busted)
     {
         HideButtons();
-        await Task.Delay(1000);
+        await Task.Delay(1000 + game.dealer.Hand.Count*500);
         if (busted)
         {
             EndText.Text = "Dealer busted, player win";
@@ -159,15 +162,15 @@ public partial class MainWindow : Window
         }
         // GameGrid.Visibility = Visibility.Hidden;
         EndGrid.Visibility = Visibility.Visible;
-        SummaryScreen(game.player);
+       
     }
 
     private async void OnTie()
     {
-        await Task.Delay(1000);
+        await Task.Delay(1000 + game.dealer.Hand.Count*500);
         EndText.Text = "Push";
         EndGrid.Visibility = Visibility.Visible;
-        SummaryScreen();
+        
         
     }
 
@@ -184,12 +187,14 @@ public partial class MainWindow : Window
     }
     
 
-    private async void SummaryScreen(Player winner = null)
+    private async void OnGameEnded(Player winner = null)
     {
-        await Task.Delay(2500);
+        await Task.Delay(2500 + (game.dealer.Hand.Count)*500);
         GameGrid.Visibility = Visibility.Hidden;
         EndGrid.Visibility = Visibility.Hidden;
         InfoGrid.Visibility = Visibility.Visible;
+       
+
         if (winner == game.player)
         {
             InfoText.Text = $"You won {betMoney*2} chips";
@@ -206,6 +211,32 @@ public partial class MainWindow : Window
             totalChips += betMoney;
         }
         UpdateBetUI();
-        
+        await Task.Delay(1500);
+        RestartGame();
     }
+
+    private void RestartGame()
+    {
+        game = new GameState();
+        AttachEvent();
+        BetGrid.Visibility = Visibility.Visible;
+        GameGrid.Visibility = Visibility.Hidden;
+        EndGrid.Visibility = Visibility.Hidden;
+        InfoGrid.Visibility = Visibility.Hidden;
+        ShowButtons();
+
+        foreach (Image image in dealerUiImage)
+        {
+            image.Source = null;
+        }
+        foreach (Image image in playerUiImage)
+        {
+            image.Source = null;
+        }
+        
+        z = 2;
+        SetUpUI();
+        UpdateBetUI();
+    }
+    
 }

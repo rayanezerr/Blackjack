@@ -120,6 +120,16 @@
                        Text="Busted"
                        Visibility="Hidden">
             </TextBlock>
+            <TextBlock Grid.Row="2" x:Name="PlayerValueText"
+                       Visibility="Visible"
+                       Margin="0,50,600,5"
+                       FontSize="25">
+            </TextBlock>
+            <TextBlock Grid.Row="2" x:Name="DealerValueText"
+                       Visibility="Visible"
+                       Margin="530,50,5,5"
+                       FontSize="25">
+            </TextBlock>
             
         </Grid>
         
@@ -133,6 +143,7 @@
             
             <TextBlock x:Name="EndText"
                        FontSize="54"
+                       Margin="0,12,0,0"
                        Text="Busted, player lose">
             </TextBlock>
             

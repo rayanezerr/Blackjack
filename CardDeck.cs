@@ -48,9 +48,6 @@ public class CardDeck
         for (int i = cardsList.Count-1; i > 0; i--)
         {
             int k = rand.Next(i + 1);
-            // Card value = cardsList[k];
-            // cardsList[k] = cardsList[i];
-            // cardsList[i] = value;
             (cardsList[k], cardsList[i]) = (cardsList[i], cardsList[k]);
         }
     }

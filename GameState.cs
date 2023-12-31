@@ -6,14 +6,14 @@ public class GameState
     public Player player;
     public Player dealer;
     public Player CurrentPlayer;
-    public bool GameOver { get; private set; }
-    
-    public Player winner;
-    public event Action PlayerTurnStarted;
+    // public bool GameOver { get; private set; }
+    //
+    // public Player winner;
+    // public event Action PlayerTurnStarted;
     public event Action Tie;
     public event Action<bool> PlayerLose; //Boolean value true if busted 
     public event Action<bool> DealerLose; //Boolean value true if busted
-    public event Action GameEnded; 
+    public event Action<Player> GameEnded;  //Winner
 
     public GameState()
     {
@@ -28,28 +28,13 @@ public class GameState
         dealer.AddCard(deck.DrawCard());
     }
 
-    public bool IsFirstBlackJack(Player p)
+    public bool IsBlackJack(Player p)
     {
-        if (p.Hand.Count == 2 && p.HandValue() == 21)
+        if (p.HandValue() == 21)
         {
             return true;
         }
-
         return false;
-    }
-
-    public Player SwitchPlayer()
-    {
-        if (CurrentPlayer == player)
-        {
-            CurrentPlayer = dealer;
-            return CurrentPlayer;
-        }
-        else
-        {
-            CurrentPlayer = player;
-            return CurrentPlayer;
-        }
     }
 
     public bool IsDealerAbove()
@@ -71,25 +56,31 @@ public class GameState
         return false;
     }
 
-    // public void StartPlayerTurn()
-    // {
-    //     PlayerTurnStarted?.Invoke();
-    // }
-
     public void Hit()
     {
-        CurrentPlayer.AddCard(deck.DrawCard());
+        player.AddCard(deck.DrawCard());
 
-        if (IsBusted(CurrentPlayer))
+        if (IsBusted(player))
         {
             PlayerLose?.Invoke(true);
-            GameEnded?.Invoke();
+            GameEnded?.Invoke(dealer);
+        }
+
+        if (IsBlackJack(player))
+        {
+            DealerLose?.Invoke(false);
+            GameEnded?.Invoke(player);
         }
     }
 
     public void Stand()
     {
         StartDealerTurn();
+        if (IsBlackJack(dealer))
+        {
+            PlayerLose?.Invoke(false);
+            GameEnded?.Invoke(dealer);
+        }
     }
 
     public void StartDealerTurn()
@@ -102,22 +93,24 @@ public class GameState
         if (IsBusted(dealer))
         {
             DealerLose?.Invoke(true);
+            GameEnded?.Invoke(player);
         }
         else
         {
             if (dealer.HandValue() > player.HandValue())
             {
                 PlayerLose?.Invoke(false);
-                GameEnded?.Invoke();
+                GameEnded?.Invoke(dealer);
             }
             else if (dealer.HandValue() < player.HandValue())
             {
                 DealerLose?.Invoke(false);
-                GameEnded?.Invoke();
+                GameEnded?.Invoke(player);
             }
             else
             {
                 Tie?.Invoke();
+                GameEnded?.Invoke(null);
             }
         }
     }
